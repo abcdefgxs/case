@@ -2,10 +2,6 @@ import re
 import requests
 import json
 
-"""
-    爬取今日头条今天的热点新闻,爬取动态网页，由于今日头条有反爬机制，故其中添加了请求头和Cookies
-"""
-
 
 def gethtml():
     try:
@@ -16,9 +12,6 @@ def gethtml():
         for line in coo.split(';'):
             name, value = line.strip().split('=', 1)  # strip()同时去掉开头和末尾的空格
             cookies[name] = value
-        # r = requests.get("https://www.toutiao.com/api/pc/feed/?category=news_hot&utm_source=toutiao&widen=1"
-        #                  "&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A1F56D9C014165E&cp"
-        #                  "=5DC1E146D5EE3E1&_signature=yS5DSgAAlPjAYjlfHcdPPskuQ1", cookies=cookies, headers=headers)
         r = requests.get("https://www.toutiao.com/api/pc/feed/?category=news_hot&utm_source=toutiao&widen=1"
                          "&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A175FE5523C37E5&cp"
                          "=5E537387BEB50E1&_signature"
@@ -36,13 +29,8 @@ if __name__ == '__main__':
     wbhtml = gethtml()
     html = json.loads(wbhtml)
     print("热点新闻:")
-    # 方法一：使用正则表达式
     html = str(html)    # 必须进行转换，否则会报错,转换过后为一字典
     news = re.findall(r"\'title\': \'.*?\'",html)
     for i in range(len(news)):
         name = eval(news[i].split(":")[1])
         print(name)
-    # # 方法二:直接利用字典的访问方法进行获取
-    # # news = html['data']
-    # # for i in news:
-    # #     print(i["title"])
